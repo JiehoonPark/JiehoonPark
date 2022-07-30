@@ -1,4 +1,3 @@
-### Nice way to meet me
 <p>
 <a href="mailto:z1hoon715@gmail.com" target="_blank"><img src="https://img.shields.io/badge/z1hoon715@gmail.com-EA4335?style=flat-square&logo=Gmail&logoColor=white"/></a>
 </p>
