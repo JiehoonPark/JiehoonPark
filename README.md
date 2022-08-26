@@ -7,8 +7,6 @@
   👋 Hi there! I'm <b>front-end developer</b> skilled in WEB<br/>
   I have experience in development based on JavaScript React, and currently studying to improve my develpment abilities.<br/>
    Always I willing to learn new things!<br/>
-  
-  I enjoy playing soccer, tennis and running. 🏃⚽️🎾<br/>
   I hope to be a colleague whom anyone wants to work with. 👍<br/><br/>
 </p>
 
