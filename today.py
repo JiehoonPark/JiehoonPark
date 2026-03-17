@@ -45,7 +45,7 @@ def get_stats():
             followers {
                 totalCount
             }
-            starredBy: repositories(ownerAffiliations: OWNER) {
+            starredBy: repositories(ownerAffiliations: OWNER, first: 100) {
                 nodes {
                     stargazerCount
                 }
