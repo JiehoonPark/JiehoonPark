@@ -133,6 +133,16 @@ def format_number(n):
     return f"{n:,}"
 
 
+def format_compact(n):
+    """Format large numbers compactly: 4810395 -> 4.8M, 1234 -> 1,234"""
+    abs_n = abs(n)
+    if abs_n >= 1_000_000:
+        return f"{n / 1_000_000:.1f}M"
+    elif abs_n >= 1_000:
+        return f"{n / 1_000:.1f}K"
+    return str(n)
+
+
 def calc_dots(line_template, values, target=60):
     """Calculate dot counts to maintain 60-char alignment.
 
@@ -181,8 +191,16 @@ def update_svg(filepath, stats):
     commit_s = format_number(commits)
     follower_s = format_number(followers)
     loc_s = format_number(loc)
+    # Use compact format for add/del if the line would be too long
     loc_add_s = format_number(loc_add)
     loc_del_s = format_number(loc_del)
+    line3_test = len(f". Lines of Code on GitHub:{loc_s} ( {loc_add_s}++, {loc_del_s}-- )")
+    if line3_test > 58:
+        loc_add_s = format_compact(loc_add)
+        loc_del_s = format_compact(loc_del)
+    line3_test = len(f". Lines of Code on GitHub:{loc_s} ( {loc_add_s}++, {loc_del_s}-- )")
+    if line3_test > 58:
+        loc_s = format_compact(loc)
 
     # Line 1: ". Repos: DOTS VAL {Contributed: VAL} | Stars: DOTS VAL" = 60
     # Fixed parts (without dots sections): ". Repos:" + val + " {Contributed: " + val + "} | Stars:" + val
