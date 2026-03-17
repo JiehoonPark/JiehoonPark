@@ -25,7 +25,10 @@ def graphql_query(query, variables=None):
         headers=HEADERS,
     )
     resp.raise_for_status()
-    return resp.json()
+    result = resp.json()
+    if "errors" in result:
+        print(f"GraphQL errors: {result['errors']}")
+    return result
 
 
 def get_stats():
@@ -54,7 +57,17 @@ def get_stats():
         }
     }
     """
-    data = graphql_query(query, {"login": USERNAME})["data"]["user"]
+    result = graphql_query(query, {"login": USERNAME})
+    if "errors" in result:
+        raise RuntimeError(f"GraphQL errors: {result['errors']}")
+    data = result.get("data", {}).get("user")
+    if data is None:
+        print(f"API response: {result}")
+        print(f"Token present: {bool(TOKEN)}, Token length: {len(TOKEN)}")
+        raise RuntimeError(
+            f"Could not fetch user '{USERNAME}'. "
+            "Check that GH_TOKEN is set and has the read:user scope."
+        )
 
     repos = data["repositories"]["totalCount"]
     contributed = data["repositoriesContributedTo"]["totalCount"]
