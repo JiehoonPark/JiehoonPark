@@ -1,6 +1,7 @@
 import requests
 import os
 import re
+import time
 from xml.etree import ElementTree as ET
 
 USERNAME = "JiehoonPark"
@@ -101,13 +102,19 @@ def get_loc():
             if repo["fork"]:
                 continue
             repo_name = repo["full_name"]
-            stats_resp = requests.get(
-                f"{REST_URL}/repos/{repo_name}/stats/contributors",
-                headers=HEADERS,
-            )
-            if stats_resp.status_code != 200:
-                continue
-            contributors = stats_resp.json()
+            contributors = None
+            for attempt in range(3):
+                stats_resp = requests.get(
+                    f"{REST_URL}/repos/{repo_name}/stats/contributors",
+                    headers=HEADERS,
+                )
+                if stats_resp.status_code == 200:
+                    contributors = stats_resp.json()
+                    break
+                elif stats_resp.status_code == 202:
+                    time.sleep(2)
+                else:
+                    break
             if not isinstance(contributors, list):
                 continue
             for contributor in contributors:
