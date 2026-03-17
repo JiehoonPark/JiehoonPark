@@ -202,10 +202,22 @@ def update_svg(filepath, stats):
     follower_dots = " " + "." * follower_dots_n + " "
 
     # Line 3: ". Lines of Code on GitHub:DOTS VAL ( VAL++,  VAL-- )" = 60
-    line3_base = len(f". Lines of Code on GitHub:{loc_s} ( {loc_add_s}++,  {loc_del_s}-- )")
-    line3_dots_total = max(1, 60 - line3_base - 1)  # 1 space after dots
-    loc_dots = "." * line3_dots_total + " "
-    loc_del_space = " "
+    line3_base = len(f". Lines of Code on GitHub:{loc_s} ( {loc_add_s}++, {loc_del_s}-- )")
+    line3_remaining = 60 - line3_base
+    if line3_remaining >= 3:
+        # Enough room: dots + space before value, extra space before loc_del
+        loc_dots = "." * (line3_remaining - 2) + " "
+        loc_del_space = " "
+    elif line3_remaining == 2:
+        loc_dots = " "
+        loc_del_space = " "
+    elif line3_remaining == 1:
+        loc_dots = " "
+        loc_del_space = ""
+    else:
+        # No room at all: remove dots and extra space
+        loc_dots = ""
+        loc_del_space = ""
 
     # Apply all replacements: values + dots
     replacements = {
