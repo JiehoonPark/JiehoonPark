@@ -191,16 +191,8 @@ def update_svg(filepath, stats):
     commit_s = format_number(commits)
     follower_s = format_number(followers)
     loc_s = format_number(loc)
-    # Use compact format for add/del if the line would be too long
     loc_add_s = format_number(loc_add)
     loc_del_s = format_number(loc_del)
-    line3_test = len(f". Lines of Code on GitHub:{loc_s} ( {loc_add_s}++, {loc_del_s}-- )")
-    if line3_test > 58:
-        loc_add_s = format_compact(loc_add)
-        loc_del_s = format_compact(loc_del)
-    line3_test = len(f". Lines of Code on GitHub:{loc_s} ( {loc_add_s}++, {loc_del_s}-- )")
-    if line3_test > 58:
-        loc_s = format_compact(loc)
 
     # Line 1: ". Repos: DOTS VAL {Contributed: VAL} | Stars: DOTS VAL" = 60
     # Fixed parts (without dots sections): ". Repos:" + val + " {Contributed: " + val + "} | Stars:" + val
@@ -219,11 +211,10 @@ def update_svg(filepath, stats):
     commit_dots = " " + "." * commit_dots_n + " "
     follower_dots = " " + "." * follower_dots_n + " "
 
-    # Line 3: ". Lines of Code on GitHub:DOTS VAL ( VAL++,  VAL-- )" = 60
-    line3_base = len(f". Lines of Code on GitHub:{loc_s} ( {loc_add_s}++, {loc_del_s}-- )")
+    # Line 3: ". Lines of Code on GitHub:DOTS VAL (VAL++, VAL--)" = 60
+    line3_base = len(f". Lines of Code on GitHub:{loc_s} ({loc_add_s}++,{loc_del_s}--)")
     line3_remaining = 60 - line3_base
     if line3_remaining >= 3:
-        # Enough room: dots + space before value, extra space before loc_del
         loc_dots = "." * (line3_remaining - 2) + " "
         loc_del_space = " "
     elif line3_remaining == 2:
@@ -233,7 +224,6 @@ def update_svg(filepath, stats):
         loc_dots = " "
         loc_del_space = ""
     else:
-        # No room at all: remove dots and extra space
         loc_dots = ""
         loc_del_space = ""
 
