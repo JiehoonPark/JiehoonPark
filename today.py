@@ -193,6 +193,12 @@ def update_svg(filepath, stats):
     loc_s = format_number(loc)
     loc_add_s = format_number(loc_add)
     loc_del_s = format_number(loc_del)
+    # 60자 초과 시 add/del을 축약, 그래도 넘으면 loc도 축약
+    if len(f". Lines of Code on GitHub:{loc_s} ({loc_add_s}++,{loc_del_s}--)") > 58:
+        loc_add_s = format_compact(loc_add)
+        loc_del_s = format_compact(loc_del)
+    if len(f". Lines of Code on GitHub:{loc_s} ({loc_add_s}++,{loc_del_s}--)") > 58:
+        loc_s = format_compact(loc)
 
     # Line 1: ". Repos: DOTS VAL {Contributed: VAL} | Stars: DOTS VAL" = 60
     # Fixed parts (without dots sections): ". Repos:" + val + " {Contributed: " + val + "} | Stars:" + val
